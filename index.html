@@ -214,7 +214,7 @@
       <div id="codePreview">
         <h2>How snippets works</h2>
         <p>
-          <img src="use-sample.png" class="screenshot" />
+          <img src="assets/use-sample.png" class="screenshot" />
         </p>
         <p>
           VS Code documentation:
@@ -227,7 +227,11 @@
         <pre><code id="snippets"></code></pre>
         <p>
           Do you think more users would benefit from this snippet? <br />
-          If so, please consider contributing to the official extension:
+          If so, please consider
+          <a
+            href="https://github.com/Esri/arcgis-js-vscode-snippets/blob/master/contributing.md#contributing-guidelines"
+            >contributing to the official extension</a
+          >:
         </p>
         <calcite-notice
           active
@@ -255,22 +259,12 @@
       </div>
     </div>
     <script>
-      // "Print to console": {
-      //  "scope": "javascript,typescript",
-      //  "prefix": "log",
-      //  "body": [
-      //      "console.log('$1');",
-      //      "$2"
-      //  ],
-      //  "description": "Log output to console"
-      // }
       let snippet = {
         name: "",
         prefix: "",
         desc: "",
         body: "",
         parse: (body) => {
-          // debugger
           body = body.replace(/^\s+|\s+$/g, "");
 
           var indented = indent.js(body, { tabString: "\t" });
@@ -281,13 +275,11 @@
           x = lines
             .map((e) => {
               e = e.replace(/\t/g, "\\t");
-              e = e.replace(/\"/g, '\\"');
 
               return `\t"${e}",`;
             })
             .join("\n");
 
-          // body.replace(/abc/g, '');
           return `[
 ${x}
     ]`;
@@ -300,6 +292,7 @@ ${x}
 }`;
         },
       };
+
       function renderSnippet() {
         document.getElementById("snippets").innerText = snippet.toString();
         hljs.highlightAll();
@@ -308,7 +301,9 @@ ${x}
         const title = encodeURIComponent(`Snippet proposal: ${snippet.name}`);
         const body = encodeURIComponent(`
 Please specify which type of snippet it is: JavaScript snippet (*.js), TypeScript snippet (*.ts), HTML snippet (*.html), ...
+
 ---
+
 **Prefix**: ${snippet.prefix}
 **Description**: ${snippet.desc}
 **Snippet**:
@@ -326,17 +321,20 @@ ${snippet.toString()}
           "calcite-button"
         ).href = `${repoUrl}/issues/new?title=${title}&body=${body}`;
       }
+
       document.querySelectorAll("calcite-input").forEach((item) => {
         item.addEventListener("keyup", (evt) => {
-          snippet[evt.target.id] = evt.target.value;
+          snippet[evt.target.id] = evt.target.value.replace(/\"/g, '\\"');
           renderSnippet();
         });
       });
+
       document.querySelectorAll(".popover").forEach((item) => {
         item.addEventListener("mouseenter", (evt) => {
           el = document.querySelector(`[reference-element="${evt.target.id}"]`);
           el.toggleAttribute("open");
         });
+
         item.addEventListener("mouseleave", (evt) => {
           el = document.querySelector(`[reference-element="${evt.target.id}"]`);
           el.toggleAttribute("open");
