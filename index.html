@@ -23,54 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
     <script src="https://zebzhao.github.io/indent.js/js/indent.min.js"></script>
 
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-      #container {
-        width: 1024px;
-        max-width: 80%;
-        margin: 0 auto;
-      }
-      form {
-        width: 50%;
-      }
-      #codePreview {
-        width: 50%;
-      }
-      form,
-      #codePreview {
-        float: left;
-        padding: 1rem;
-      }
-      textarea#body {
-        height: 200px;
-      }
-      .screenshot {
-        max-width: 100%;
-        width: 500px;
-      }
-      .text-center {
-        text-align: center;
-      }
-      calcite-label calcite-icon {
-        float: right;
-      }
-      calcite-popover div {
-        padding: 1rem;
-        line-height: 1.25rem;
-        max-width: 400px;
-      }
-      .mt1 {
-        margin-top: 1rem;
-      }
-      .mt0 {
-        margin-top: 0rem;
-      }
-      .mb0 {
-        margin-bottom: 0rem;
-      }
-    </style>
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
     <div id="container">
@@ -162,9 +115,9 @@
                   IntelliSense.
                 </p>
                 <!-- <p>
-                        <b>Recomendations</b><br>
-                        You can add a more detailed information about what the snippet 
-                    </p> -->
+                    <b>Recomendations</b><br>
+                    You can add a more detailed information about what the snippet 
+                </p> -->
               </div>
             </calcite-popover>
             <calcite-icon
@@ -257,91 +210,25 @@
           >
         </p>
       </div>
+      <p id="footer">
+        <b>Note</b>: You can also use the
+        <a
+          href="https://snippet-generator.app/?description=&tabtrigger=&snippet=&mode=sublimetext"
+          >snippet-generator.app</a
+        >
+        to create SublimeText and Atom snippets
+      </p>
+      <a href="https://github.com/hhkaos/vscode-snippets-builder" id="ribbon"
+        ><img
+          loading="lazy"
+          width="149"
+          height="149"
+          src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
+          class="attachment-full size-full"
+          alt="Fork me on GitHub"
+          data-recalc-dims="1"
+      /></a>
     </div>
-    <script>
-      let snippet = {
-        name: "",
-        prefix: "",
-        desc: "",
-        body: "",
-        parse: (body) => {
-          body = body.replace(/^\s+|\s+$/g, "");
-
-          var indented = indent.js(body, { tabString: "\t" });
-
-          snippet.body = indented;
-
-          let lines = indented.split("\r\n");
-          x = lines
-            .map((e) => {
-              e = e.replace(/\t/g, "\\t");
-
-              return `\t"${e}",`;
-            })
-            .join("\n");
-
-          return `[
-${x}
-    ]`;
-        },
-        toString: () => {
-          return `"${snippet.name}": {
-    "prefix": "${snippet.prefix}",
-    "body": ${snippet.parse(snippet.body)},
-    "description": "${snippet.desc}"
-}`;
-        },
-      };
-
-      function renderSnippet() {
-        document.getElementById("snippets").innerText = snippet.toString();
-        hljs.highlightAll();
-
-        const repoUrl = "https://github.com/Esri/arcgis-js-vscode-snippets";
-        const title = encodeURIComponent(`Snippet proposal: ${snippet.name}`);
-        const body = encodeURIComponent(`
-Please specify which type of snippet it is: JavaScript snippet (*.js), TypeScript snippet (*.ts), HTML snippet (*.html), ...
-
----
-
-**Prefix**: ${snippet.prefix}
-**Description**: ${snippet.desc}
-**Snippet**:
-
-\`\`\`js
-${snippet.body}
-\`\`\`
-
-Code:
-\`\`\`js
-${snippet.toString()}
-\`\`\`
-`);
-        document.querySelector(
-          "calcite-button"
-        ).href = `${repoUrl}/issues/new?title=${title}&body=${body}`;
-      }
-
-      document.querySelectorAll("calcite-input").forEach((item) => {
-        item.addEventListener("keyup", (evt) => {
-          snippet[evt.target.id] = evt.target.value.replace(/\"/g, '\\"');
-          renderSnippet();
-        });
-      });
-
-      document.querySelectorAll(".popover").forEach((item) => {
-        item.addEventListener("mouseenter", (evt) => {
-          el = document.querySelector(`[reference-element="${evt.target.id}"]`);
-          el.toggleAttribute("open");
-        });
-
-        item.addEventListener("mouseleave", (evt) => {
-          el = document.querySelector(`[reference-element="${evt.target.id}"]`);
-          el.toggleAttribute("open");
-        });
-      });
-
-      renderSnippet();
-    </script>
+    <script src="main.js"></script>
   </body>
 </html>
