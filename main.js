@@ -59,7 +59,10 @@ ${snippet.toString()}
 
 document.querySelectorAll("calcite-input").forEach((item) => {
   item.addEventListener("keyup", (evt) => {
-    snippet[evt.target.id] = evt.target.value.replace(/\"/g, '\\"');
+    snippet[evt.target.closest("calcite-input").id] = evt.target.value.replace(
+      /\"/g,
+      '\\"'
+    );
     renderSnippet();
   });
 });
